@@ -1,0 +1,39 @@
+import './DigitalClock.css';
+import {useState,useEffect} from 'react';
+
+
+function DigitalClock(){
+	const [clock,setClock] = useState(new Date());
+	useEffect(()=>{
+		const id = setInterval(()=>{
+			setClock(new Date());
+		},1000);
+		return ()=>{
+			clearInterval(id);
+		};
+	},[]);
+	
+	const data ={
+		minutes: clock.getMinutes(),
+		seconds: clock.getSeconds(),
+		date: clock.getDate(),
+		day: clock.getDay(),
+		month: clock.getMonth(),
+		year: clock.getFullYear(),
+		meridian: clock.getHours() >= 12 ? "PM" : "AM",
+		hours: clock.getHours() % 12 || 12,
+		daysWords: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+		monthsWords: ['January','February','March','April','May','June','July','August','September','October','November','December']
+	};
+    const pad = (value)=>(value < 10 ? '0'+value : value);
+	
+	return(<div className="container">
+			<div className="clock">
+				<span>{pad(data.hours)}:{pad(data.minutes)}:{pad(data.seconds)} {data.meridian}</span>
+				<span>{data.daysWords[data.day]}</span>
+				<span>{pad(data.date)} {data.monthsWords[data.month]},{data.year}</span>
+			</div>		
+			</div>)
+}
+
+export default DigitalClock;
